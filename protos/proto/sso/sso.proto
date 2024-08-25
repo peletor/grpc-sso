@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package Auth;
 
-option go_package = "peletor.sso.v1;ssov1";
+option go_package = "peletor.sso.v1;sso";
 
 service Auth {
   rpc Register (RegisterRequest) returns (RegisterResponse);
