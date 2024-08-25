@@ -1,7 +1,9 @@
 package main
 
+import "grpc-sso/internal/config"
+
 func main() {
-	// TODO: config init
+	config.MustLoad()
 
 	// TODO: logger init
 
