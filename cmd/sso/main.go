@@ -1,13 +1,16 @@
 package main
 
-import "grpc-sso/internal/config"
+import (
+	"grpc-sso/internal/config"
+	"grpc-sso/internal/logger/slogger"
+)
 
 func main() {
-	config.MustLoad()
+	cfg := config.MustLoad()
 
-	// TODO: logger init
+	_ = slogger.SetupLogger(cfg.Env)
 
 	// TODO: app init
 
-	// TODO: start gRPC servergit
+	// TODO: start gRPC server
 }
