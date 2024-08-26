@@ -5,7 +5,7 @@ import (
 
 	"google.golang.org/grpc"
 
-	sso "grpc-sso/protos/gen/go"
+	"grpc-sso/internal/grpc/proto/sso"
 )
 
 type serverAPI struct {
@@ -27,19 +27,27 @@ type Auth interface {
 	) (userID int64, err error)
 }
 
-func Register(gRPCServer *grpc.Server, auth Auth) {
-	sso.RegisterAuthServer(gRPCServer, &serverAPI{auth: auth})
+func Register(gRPCServer *grpc.Server) {
+	sso.RegisterAuthServer(gRPCServer, &serverAPI{ /*auth: auth*/ })
 }
 
 func (s *serverAPI) Login(
 	ctx context.Context,
 	in *sso.LoginRequest,
 ) (*sso.LoginResponse, error) {
-	// TODO
+	panic("implement me")
 }
 
 func (s *serverAPI) Register(
 	ctx context.Context,
-	in sso.RegisterRequest,
-) (*sso.RegisterResponce, err error) {
+	req *sso.RegisterRequest,
+) (*sso.RegisterResponse, error) {
+	panic("implement me")
+}
+
+func (s *serverAPI) IsAdmin(
+	ctx context.Context,
+	req *sso.IsAdminRequest,
+) (*sso.IsAdminResponse, error) {
+	panic("implement me")
 }
