@@ -5,3 +5,5 @@ type User struct {
 	Email    string
 	PassHash []byte
 }
+
+const EmptyUserID = int64(0)

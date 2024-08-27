@@ -4,6 +4,7 @@ import (
 	"context"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"grpc-sso/internal/domain/models"
 
 	"google.golang.org/grpc"
 
@@ -92,11 +93,6 @@ func (s *serverAPI) IsAdmin(
 	}, nil
 }
 
-const (
-	emptyAppId  = 0
-	emptyUserId = 0
-)
-
 func validateLogin(req *sso.LoginRequest) error {
 	if req.GetEmail() == "" {
 		return status.Error(codes.InvalidArgument, "email is required")
@@ -106,7 +102,7 @@ func validateLogin(req *sso.LoginRequest) error {
 		return status.Error(codes.InvalidArgument, "password is required")
 	}
 
-	if req.GetAppId() == emptyAppId {
+	if req.GetAppId() == models.EmptyAppID {
 		return status.Error(codes.InvalidArgument, "appId is required")
 	}
 
@@ -126,7 +122,7 @@ func validateRegister(req *sso.RegisterRequest) error {
 }
 
 func validateIsAdmin(req *sso.IsAdminRequest) error {
-	if req.GetUserId() == emptyUserId {
+	if req.GetUserId() == models.EmptyUserID {
 		return status.Error(codes.InvalidArgument, "email is required")
 	}
 

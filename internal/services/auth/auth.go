@@ -2,7 +2,10 @@ package auth
 
 import (
 	"context"
+	"fmt"
+	"golang.org/x/crypto/bcrypt"
 	"grpc-sso/internal/domain/models"
+	"grpc-sso/internal/grpc/auth"
 	"log/slog"
 	"time"
 )
@@ -48,7 +51,7 @@ func New(
 	}
 }
 
-// var _ auth.Auth = &Auth{}
+var _ auth.Auth = &Auth{}
 
 // Login checks is user exists.
 // If user does not exist, returns error.
@@ -68,7 +71,29 @@ func (a *Auth) RegisterNewUser(
 	email string,
 	password string,
 ) (userID int64, err error) {
-	panic("implement me")
+	const op = "auth.RegisterNewUser"
+
+	log := a.log.With(slog.String("op", op))
+
+	log.Info("Registering new user", slog.String("email", email))
+
+	passHash, cryptErr := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if cryptErr != nil {
+		log.Error("Failed to generate password hash", slog.String("error", cryptErr.Error()))
+
+		return models.EmptyUserID, fmt.Errorf("%s: %w", op, cryptErr)
+	}
+
+	userID, err = a.userSaver.SaveUser(ctx, email, passHash)
+	if err != nil {
+		log.Error("Failed to save user", slog.String("error", err.Error()))
+
+		return models.EmptyUserID, fmt.Errorf("%s: %w", op, cryptErr)
+	}
+
+	log.Info("User registered")
+
+	return userID, nil
 }
 
 // IsAdmin checks is user is admin

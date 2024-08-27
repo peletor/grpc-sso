@@ -5,3 +5,5 @@ type App struct {
 	Name   string
 	Secret string
 }
+
+const EmptyAppID = 0
