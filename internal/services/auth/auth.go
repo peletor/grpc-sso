@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"grpc-sso/internal/domain/models"
-	"grpc-sso/internal/grpc/auth"
 	"grpc-sso/internal/lib/jwt"
 	"grpc-sso/internal/storage"
 	"log/slog"
@@ -59,8 +58,6 @@ func New(
 		tokenTTL:     tokenTTL,
 	}
 }
-
-var _ auth.Auth = &Auth{}
 
 // Login checks is user exists.
 // If user does not exist, returns error.
