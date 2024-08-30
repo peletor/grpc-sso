@@ -95,7 +95,7 @@ func (s *serverAPI) IsAdmin(
 
 	isAdmin, err := s.auth.IsAdmin(ctx, req.GetUserId())
 	if err != nil {
-		if errors.Is(err, auth.ErrInvalidCredentials) {
+		if errors.Is(err, auth.ErrUserNotFound) {
 			return nil, status.Error(codes.NotFound, "user not found")
 		}
 

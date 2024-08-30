@@ -40,6 +40,7 @@ var (
 	ErrInvalidCredentials = errors.New("invalid credentials")
 	ErrInvalidAppID       = errors.New("invalid app id")
 	ErrUserExists         = errors.New("user already exists")
+	ErrUserNotFound       = errors.New("user not found")
 )
 
 // New returns a new instance of Auth service
@@ -118,6 +119,8 @@ func (a *Auth) Login(
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
 
+	log.Info("User login successful")
+
 	return token, nil
 }
 
@@ -145,7 +148,7 @@ func (a *Auth) RegisterNewUser(
 	userID, err = a.userSaver.SaveUser(ctx, email, passHash)
 	if err != nil {
 		if errors.Is(err, storage.ErrUserExists) {
-			log.Error("User already exists", slog.String("error", err.Error()))
+			log.Warn("User already exists", slog.String("error", err.Error()))
 
 			return models.EmptyUserID, fmt.Errorf("%s: %w", op, ErrUserExists)
 		}
@@ -156,7 +159,6 @@ func (a *Auth) RegisterNewUser(
 	}
 
 	log.Info("User registered")
-	log.Debug("User", slog.String("email", email))
 
 	return userID, nil
 }
@@ -179,7 +181,7 @@ func (a *Auth) IsAdmin(
 		if errors.Is(err, storage.ErrUserNotFound) {
 			log.Warn("User not found", slog.String("error", err.Error()))
 
-			return false, fmt.Errorf("%s: %w", op, ErrInvalidCredentials)
+			return false, fmt.Errorf("%s: %w", op, ErrUserNotFound)
 		}
 
 		log.Error("Filed to get user", slog.String("error", err.Error()))
