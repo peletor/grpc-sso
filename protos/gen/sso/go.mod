@@ -1,4 +1,4 @@
-module github.com/peletor/grpc-sso/giprotos/gen/sso
+module github.com/peletor/grpc-sso/protos/gen/sso
 
 go 1.21
 
